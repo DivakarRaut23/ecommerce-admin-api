@@ -1,3 +1,15 @@
 ### root access
 
 GET http://localhost:8000
+
+
+### Login API endpoint
+
+POST http://localhost:8000/api/v1/Login
+Content-Type: application/json
+
+{
+    "email": "test@tasty.com",
+    "password" : "password123"
+   
+}

@@ -10,10 +10,41 @@ const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(morgan("tiny"));
+app.use(express.urlencoded({ extended: false }))
+ 
+// parse application/json
+app.use(express.json())
+ 
+// Load Routers
+
+import loginRouter from './routers/login.router.js'
+
+
+
+//USE APIS
+
+app.use('/api/v1/login', loginRouter)
 
 app.get("/", function(req,res) {
     res.send("Hello There");
 });
+
+// 404 Return
+
+app.use((req,res,next) => {
+
+    const error = new Error("Resource not found")
+    error.status = 404
+
+    next(error)
+})
+
+// Error Handling
+import {handleError} from './utils/errorHandler.js'
+
+app.use((error,req,res,next) => {
+    handleError(error,res)
+})
 
 app.listen(PORT, error =>{
     if (error) console.log(erro)
