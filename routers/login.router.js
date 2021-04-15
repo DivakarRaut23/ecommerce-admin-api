@@ -2,6 +2,8 @@ import express from 'express'
 
 import {loginValidation} from '../middlewares/formValidationmiddleware.js'
 
+import {createUser, getUserByEmailPassword} from '../models/user/User.model.js'
+
 const router = express.Router()
 
 router.all('*', (req,res, next) => {
@@ -10,9 +12,23 @@ router.all('*', (req,res, next) => {
     next()
 })
 
-router.post("/", loginValidation, (req, res) => {
-    console.log(req.body)
-    res.send({message: "Login requested"})
+
+
+router.post("/", loginValidation, async (req, res) => {
+    try {
+        const result = await getUserByEmailPassword(req.body)
+
+        if(result?._id){
+            return res.json({status:"success",message: "Login Success", result})
+        }
+        res.json({status:"error", message:"Invalid Login Details"})
+
+
+        
+    } catch (error) {
+        throw new Error(error.message)
+        
+    }
 })
 
 export default router

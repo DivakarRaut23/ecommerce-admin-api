@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config()
+
 import express from "express"
 
 const app = express();
@@ -14,6 +17,10 @@ app.use(express.urlencoded({ extended: false }))
  
 // parse application/json
 app.use(express.json())
+
+import mongoClient from './config/db.js'
+
+mongoClient();
  
 // Load Routers
 
@@ -41,6 +48,7 @@ app.use((req,res,next) => {
 
 // Error Handling
 import {handleError} from './utils/errorHandler.js'
+
 
 app.use((error,req,res,next) => {
     handleError(error,res)
