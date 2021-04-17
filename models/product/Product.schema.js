@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const ProductSchema = mongoose.Schema(
 	{
+		status: {
+			type: Boolean,
+			require: true,
+			default: true,
+		},
 		name: {
 			type: String,
 			require: true,
@@ -21,9 +26,7 @@ const ProductSchema = mongoose.Schema(
             type: Number,
         },
         saleEndDate: {
-			type: Number,
-			require: true,
-			default: "",
+			type: Date,
 		},
         qty: {
 			type: Number,

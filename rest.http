@@ -21,10 +21,8 @@ Content-Type: application/json
 
 {
     "name" : "Dalla Sabun",
-    "price":"2.5",
-    "qty" : "23",
-    "saleEndDate":"23/04/2021",
-    "description":"This is a very good saabun",
+    "price":"2.5"
+    
 
 
 }
