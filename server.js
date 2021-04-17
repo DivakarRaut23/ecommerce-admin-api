@@ -25,12 +25,14 @@ mongoClient();
 // Load Routers
 
 import loginRouter from './routers/login.router.js'
+import productRouter from  './routers/product.router.js'
 
 
 
 //USE APIS
 
 app.use('/api/v1/login', loginRouter)
+app.use("/api/v1/product", productRouter)
 
 app.get("/", function(req,res) {
     res.send("Hello There");

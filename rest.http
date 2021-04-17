@@ -13,3 +13,18 @@ Content-Type: application/json
     "password" : "pass123"
    
 }
+
+### ADD Product API
+
+POST http://localhost:8000/api/v1/product
+Content-Type: application/json
+
+{
+    "name" : "Dalla Sabun",
+    "price":"2.5",
+    "qty" : "23",
+    "saleEndDate":"23/04/2021",
+    "description":"This is a very good saabun",
+
+
+}

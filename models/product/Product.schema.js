@@ -1,0 +1,55 @@
+import mongoose from "mongoose";
+
+const ProductSchema = mongoose.Schema(
+	{
+		name: {
+			type: String,
+			require: true,
+			default: "",
+		},
+		slug: {
+			type: String,
+			require: true,
+			default: "",
+		},
+		price: {
+			type: Number,
+			require: true,
+			default: "",
+		},
+        salePrice: {
+            type: Number,
+        },
+        saleEndDate: {
+			type: Number,
+			require: true,
+			default: "",
+		},
+        qty: {
+			type: Number,
+			require: true,
+			default: "",
+		},
+        description: {
+			type: String,
+			require: true,
+			default: "",
+		},
+        thumbNail: {
+            type: String,
+        },
+        images: {
+            type: Array,
+        },
+        categories: {
+            type: Array,
+        },
+	},
+	{
+		timestamp: true,
+	}
+);
+
+const ProdSchema = mongoose.model("Product", ProductSchema);
+
+export default ProdSchema;
