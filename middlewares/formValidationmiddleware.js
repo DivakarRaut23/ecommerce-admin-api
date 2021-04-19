@@ -7,6 +7,7 @@ const longStr = Joi.string().max(2000)
 const date = Joi.date()
 const num = Joi.number()
 const array = Joi.array()
+const boolean = Joi.boolean()
 
 
 export const loginValidation = (req,res, next) => {
@@ -15,9 +16,7 @@ export const loginValidation = (req,res, next) => {
 
     const value = schema.validate(req.body)
 
-    console.log("From form validation>>>>",value)
-
-    console.log("Error cha ??>>>",value.error)
+ 
 
     if (value.error) {
         return res.json({
@@ -35,6 +34,7 @@ export const newProductValidation = (req,res, next) => {
         name: shortStr.required(),
         price: num.required(),
         qty: num.required(),
+        status: boolean.required(),
         description: longStr.required(),
         images: array,
         categories: array,
@@ -45,10 +45,7 @@ export const newProductValidation = (req,res, next) => {
 
     const value = schema.validate(req.body)
 
-    console.log("From form validation>>>>",value)
-
-    console.log("Error cha ??>>>",value.error)
-
+  
     if (value.error) {
         return res.json({
             status: "error",
@@ -58,3 +55,32 @@ export const newProductValidation = (req,res, next) => {
 
     next();
 }
+
+export const updateProductValidation = (req, res, next) => {
+	const schema = Joi.object({
+		_id: shortStr.required(),
+		status: boolean.required(),
+		name: shortStr.required(),
+		slug: shortStr.required(),
+		qty: num.required(),
+
+		price: num.required(),
+		salePrice: num,
+		saleEndDate: date,
+		description: longStr.required(),
+		images: array,
+		categories: array,
+	});
+
+	//validation
+	const value = schema.validate(req.body);
+
+	if (value.error) {
+		return res.json({
+			status: "error",
+			message: value.error.message,
+		});
+	}
+
+	next();
+};

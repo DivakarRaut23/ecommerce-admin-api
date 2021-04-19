@@ -2,77 +2,110 @@ import express, { Router } from 'express';
 const router = express.Router();
 import slugify from 'slugify';
 import {insertProduct} from '../models/product/Product.model.js'
-import {newProductValidation} from '../middlewares/formValidationmiddleware.js'
-import {getProducts,deleteProduct} from '../models/product/Product.model.js'
+import {newProductValidation,updateProductValidation } from '../middlewares/formValidationmiddleware.js'
+import {insertProduct,
+	getProducts,
+	deleteProduct,
+	getProductById,
+	updateProductById} from '../models/product/Product.model.js'
 
 router.all("*", (req,res,next) => {
     next()
 })
 
-router.get("/", async (req,res) => {
-    try {
-        const result = await getProducts();
-        res.json({
-            status:"success",
-            message: "All the Product List",
-            result
-        })
-        
-    } catch (error) {
-        throw error
-        
-    }
-})
+router.get("/:_id?", async (req, res) => {
+	const { _id } = req.params;
+	try {
+		const result = _id ? await getProductById(_id) : await getProducts();
 
-router.delete("/", async (req,res) => {
+		res.json({
+			status: "success",
+			message: "Here are all the products",
+			result,
+		});
+	} catch (error) {
+		throw error;
+	}
+});
 
-    const _id = req.body
+router.put("/", updateProductValidation, async (req, res) => {
+	const { _id, ...formDt } = req.body;
+	try {
+		const result = await updateProductById({ _id, formDt });
 
-    console.log("id in the delete section", id)
+		if (result?._id) {
+			return res.json({
+				status: "success",
+				message: "The product has been updated",
+				result,
+			});
+		}
 
+		res.json({
+			status: "error",
+			message: "Unable to update the product, Please try again later",
+			result,
+		});
+	} catch (error) {
+		throw error;
+	}
+});
 
-    try {
-        const result = await deleteProduct(_id);
-        res.json({
-            status:"success",
-            message: "Product has been deleted",
-            result
-        })
-        
-    } catch (error) {
-        throw error
-        
-    }
-})
+router.delete("/", async (req, res) => {
+	try {
+		if (!req.body) {
+			return res.json({
+				status: "error",
+				message: "Unable to add the product, Please try again later",
+			});
+		}
 
-router.post("/", newProductValidation, async (req,res) => {
-    console.log(req.body)
+		const result = await deleteProduct(req.body);
+		console.log(result);
 
-    try {
-        const result = await insertProduct(req.body);
-        console.log(result)
+		if (result?._id) {
+			return res.json({
+				status: "success",
+				message: "The product has been deleted.",
+				result,
+			});
+		}
 
-        if(result._id){
-            return res.json({
-                status: "success",
-                message: "The Product has been added!",
-                result,
-            })
-        }
+		res.json({
+			status: "error",
+			message: "Unable to delete the product, Please try again later",
+		});
+	} catch (error) {
+		console.log(error);
+		throw error;
+	}
+});
 
-        res.json({
-            status: "error",
-            message: "Adding Product failed"
-        })
+router.post("/", newProductValidation, async (req, res) => {
+	try {
+		const addNewProd = {
+			...req.body,
+			slug: slugify(req.body.name),
+		};
 
+		const result = await insertProduct(addNewProd);
+		console.log(result);
 
+		if (result._id) {
+			return res.json({
+				status: "success",
+				message: "The product has been added!",
+				result,
+			});
+		}
 
-        
-    } catch (error) {
-
-        throw error;
-        
-    }
-})
+		res.json({
+			status: "error",
+			message: "Unable to add the product, Please try again later",
+		});
+	} catch (error) {
+		throw error;
+	}
+});
 
 export default router
