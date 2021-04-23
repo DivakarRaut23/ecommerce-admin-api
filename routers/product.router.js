@@ -1,53 +1,59 @@
-import express, { Router } from 'express';
+import express from "express";
 const router = express.Router();
-import slugify from 'slugify';
-var multer  = require('multer')
+import slugify from "slugify";
+import multer from "multer";
 
-import {newProductValidation,updateProductValidation } from '../middlewares/formValidationmiddleware.js'
-import {insertProduct,
+import {
+	newProductValidation,
+	updateProductValidation,
+} from "../middlewares/formValidation.middleware.js";
+
+import {
+	insertProduct,
 	getProducts,
 	deleteProduct,
 	getProductById,
-	updateProductById} from '../models/product/Product.model.js'
+	updateProductById,
+} from "../models/product/Product.model.js";
 
-// Multer Configuration
+// Multer configuration
 
 const ALLOWED_FILE_TYPE = {
 	"image/png": "png",
 	"image/jpeg": "jpeg",
-	"image/jpg": "jpg"
-}
+	"image/jpg": "jpg",
+};
 
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
+		let error = null;
+		const isAllowed = ALLOWED_FILE_TYPE[file.mimetype];
 
-	let error = null 
-//get file type from req.mimetype
-	const isAllowed = ALLOWED_FILE_TYPE[file.mimetype]
+		if (!isAllowed) {
+			error = new Error(
+				"Some of the file types are not allowd, Only images are allowed"
+			);
+			error.status = 400;
+		}
 
-	if(!isAllowed){
-		error = new Error("Some of the file types are not allowed, Only images are allowed")
-
-		error.status = 400
-	}
-
-	  cb(error, 'public/img/product')
+		cb(error, "public/img/product");
 	},
 	filename: function (req, file, cb) {
-	  const fileName = slugify(file.originalname.split(".")[0])
-	  const extension = ALLOWED_FILE_TYPE[file.mimetype]
-	  const fullFileName = fileName + '-' + Date.now() + "." + extension
-	  cb(null, fullFileName)
-	}
-  })
-  
-  var upload = multer({ storage: storage })
+		//he there.jpg ==> he-there-4646465.jpg
+		const fileName = slugify(file.originalname.split(".")[0]);
+		const extension = ALLOWED_FILE_TYPE[file.mimetype];
+		const fullFileName = fileName + "-" + Date.now() + "." + extension;
+		cb(null, fullFileName);
+	},
+});
 
-// End Multer Configuration
+var upload = multer({ storage: storage });
 
-router.all("*", (req,res,next) => {
-    next()
-})
+// End Multer configuration
+
+router.all("*", (req, res, next) => {
+	next();
+});
 
 router.get("/:_id?", async (req, res) => {
 	const { _id } = req.params;
@@ -63,6 +69,53 @@ router.get("/:_id?", async (req, res) => {
 		throw error;
 	}
 });
+
+router.post(
+	"/",
+	upload.array("images", 5),
+	newProductValidation,
+	async (req, res) => {
+		try {
+			const addNewProd = {
+				...req.body,
+				slug: slugify(req.body.name),
+			};
+
+			const basePath = `${req.protocol}://${req.get("host")}/img/product/`;
+			const files = req.files;
+			console.log(files);
+
+			const images = [];
+
+			files.map(file => {
+				const imgFullPath = basePath + file.filename;
+
+				images.push(imgFullPath);
+			});
+
+			const result = await insertProduct({
+				...addNewProd,
+				images,
+			});
+			console.log(result);
+
+			if (result._id) {
+				return res.json({
+					status: "success",
+					message: "The product has been added!",
+					result,
+				});
+			}
+
+			res.json({
+				status: "error",
+				message: "Unable to add the product, Please try again later",
+			});
+		} catch (error) {
+			throw error;
+		}
+	}
+);
 
 router.put("/", updateProductValidation, async (req, res) => {
 	const { _id, ...formDt } = req.body;
@@ -117,43 +170,4 @@ router.delete("/", async (req, res) => {
 	}
 });
 
-router.post("/", newProductValidation, async (req, res) => {
-	try {
-		const addNewProd = {
-			...req.body,
-			slug: slugify(req.body.name),
-		};
-
-		
-		const basePath = `${req.protocol}://${req.get('host')}/img/product/`
-
-		const files = req.files;
-
-		const images = []
-
-		files.map(file => {
-			const imgFullPath = basePath + file.fileName
-			images.push(imgFullPath)
-		})
-
-		const result = await insertProduct(...addNewProd, images);
-		console.log(result);
-
-		if (result._id) {
-			return res.json({
-				status: "success",
-				message: "The product has been added!",
-				result,
-			});
-		}
-
-		res.json({
-			status: "error",
-			message: "Unable to add the product, Please try again later",
-		});
-	} catch (error) {
-		throw error;
-	}
-});
-
-export default router
+export default router;
