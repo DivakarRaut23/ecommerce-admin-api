@@ -5,7 +5,7 @@ const ProductSchema = mongoose.Schema(
 		status: {
 			type: Boolean,
 			require: true,
-			default: true,
+			default: false,
 		},
 		name: {
 			type: String,
@@ -20,33 +20,35 @@ const ProductSchema = mongoose.Schema(
 		price: {
 			type: Number,
 			require: true,
-			default: "",
+			default: 0,
 		},
-        salePrice: {
-            type: Number,
-        },
-        saleEndDate: {
+		salePrice: {
+			type: Number,
+		},
+		saleEndDate: {
 			type: Date,
+			default: null,
 		},
-        qty: {
+
+		qty: {
 			type: Number,
 			require: true,
-			default: "",
+			default: 0,
 		},
-        description: {
+		description: {
 			type: String,
 			require: true,
 			default: "",
 		},
-        thumbNail: {
-            type: String,
-        },
-        images: {
-            type: Array,
-        },
-        categories: {
-            type: Array,
-        },
+		thumbNail: {
+			type: String,
+		},
+		images: {
+			type: Array,
+		},
+		categories: {
+			type: Array,
+		},
 	},
 	{
 		timestamp: true,
