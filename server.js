@@ -12,6 +12,9 @@ const PORT = process.env.PORT || 8000;
 app.use(cors());
 app.use(morgan("tiny"));
 
+const __dirname = path.resolve();
+app.use( express.static(path.join(__dirname, 'public')))
+
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
 // parse application/json

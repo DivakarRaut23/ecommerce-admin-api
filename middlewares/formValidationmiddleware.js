@@ -30,6 +30,10 @@ export const loginValidation = (req,res, next) => {
 
 export const newProductValidation = (req,res, next) => {
 
+    const categories = req.body.categories.length ? req.body.categories.split(",") : []
+
+    req.body.categories = categories
+
     const schema = Joi.object({
         name: shortStr.required(),
         price: num.required(),

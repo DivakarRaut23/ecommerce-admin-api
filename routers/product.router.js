@@ -1,13 +1,49 @@
 import express, { Router } from 'express';
 const router = express.Router();
 import slugify from 'slugify';
-import {insertProduct} from '../models/product/Product.model.js'
+var multer  = require('multer')
+
 import {newProductValidation,updateProductValidation } from '../middlewares/formValidationmiddleware.js'
 import {insertProduct,
 	getProducts,
 	deleteProduct,
 	getProductById,
 	updateProductById} from '../models/product/Product.model.js'
+
+// Multer Configuration
+
+const ALLOWED_FILE_TYPE = {
+	"image/png": "png",
+	"image/jpeg": "jpeg",
+	"image/jpg": "jpg"
+}
+
+var storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+
+	let error = null 
+//get file type from req.mimetype
+	const isAllowed = ALLOWED_FILE_TYPE[file.mimetype]
+
+	if(!isAllowed){
+		error = new Error("Some of the file types are not allowed, Only images are allowed")
+
+		error.status = 400
+	}
+
+	  cb(error, 'public/img/product')
+	},
+	filename: function (req, file, cb) {
+	  const fileName = slugify(file.originalname.split(".")[0])
+	  const extension = ALLOWED_FILE_TYPE[file.mimetype]
+	  const fullFileName = fileName + '-' + Date.now() + "." + extension
+	  cb(null, fullFileName)
+	}
+  })
+  
+  var upload = multer({ storage: storage })
+
+// End Multer Configuration
 
 router.all("*", (req,res,next) => {
     next()
@@ -88,7 +124,19 @@ router.post("/", newProductValidation, async (req, res) => {
 			slug: slugify(req.body.name),
 		};
 
-		const result = await insertProduct(addNewProd);
+		
+		const basePath = `${req.protocol}://${req.get('host')}/img/product/`
+
+		const files = req.files;
+
+		const images = []
+
+		files.map(file => {
+			const imgFullPath = basePath + file.fileName
+			images.push(imgFullPath)
+		})
+
+		const result = await insertProduct(...addNewProd, images);
 		console.log(result);
 
 		if (result._id) {
