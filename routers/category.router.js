@@ -54,7 +54,6 @@ router.post("/", addCategoryValidation, async (req, res) => {
 	}
 });
 
-<<<<<<< HEAD
 router.put("/", updateCategoryValidation, async (req, res) => {
 	console.log(req.body);
 	// const { _id, ...updateCategory } = req.body;
@@ -71,22 +70,6 @@ router.put("/", updateCategoryValidation, async (req, res) => {
 			status: "error",
 			message: "Error! Unable to update the category, Please try again later",
 		});
-=======
-router.put("/", async (req, res) => {
-	console.log(req.body);
-
-	try {
-	
-
-		const result = await updateCategory(req.body);
-		if(result._id){
-		res.json({
-			status: "success",
-			message: "Category has been updated",
-			result,
-		});
-		}
->>>>>>> 4a2ee307f487d6c82906d9fbd40155e6d1234140
 	} catch (error) {
 		console.log(error);
 		throw new Error(error.message);
