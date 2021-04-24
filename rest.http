@@ -1,28 +1,54 @@
 ### root access
+GET  http://localhost:8000
 
-GET http://localhost:8000
-
-
-### Login API endpoint
-
-POST http://localhost:8000/api/v1/Login
+### Login api endpoing
+POST  http://localhost:8000/api/v1/login
 Content-Type: application/json
 
 {
-    "email": "db7@gmail.com",
-    "password" : "pass123"
-   
+  "email": "test@emai.comd",
+  "password": "12346"
 }
 
-### ADD Product API
 
-POST http://localhost:8000/api/v1/product
+
+
+### Categor Zone ####
+### Fetch all category
+GET  http://localhost:8000/api/v1/category
+ 
+
+### Add a category
+POST  http://localhost:8000/api/v1/category
 Content-Type: application/json
 
 {
-    "name" : "Dalla Sabun",
-    "price":"2.5"
-    
+  "name": "Root Category", "parentCat": null}
 
 
-}
+### Add a category
+PUT   http://localhost:8000/api/v1/category
+Content-Type: application/json
+
+{
+  "_id": "607c198c9dfa507e340456fe",
+  "name": "Root Category"}
+
+### Delete Categories
+Delete  http://localhost:8000/api/v1/category
+ 
+ 
+### Products APIs
+### Add new product
+POST  http://localhost:8000/api/v1/product
+Content-Type: application/json
+
+{"name": "Root Category", 
+"price": 0}
+
+
+### fetch all products
+GET   http://localhost:8000/api/v1/product
+
+### fetch single product
+GET   http://localhost:8000/api/v1/product/607a850e263dc01ac00d540c

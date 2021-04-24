@@ -58,6 +58,15 @@ export const newProductValidation = (req, res, next) => {
 };
 
 export const updateProductValidation = (req, res, next) => {
+	req.body.saleEndDate =
+		req.body.saleEndDate === "null" ? null : req.body.saleEndDate;
+
+	const categories = req.body.categories.length
+		? req.body.categories.split(",")
+		: [];
+
+	req.body.categories = categories;
+
 	const schema = Joi.object({
 		_id: shortStr.required(),
 		status: boolean.required(),
@@ -70,7 +79,49 @@ export const updateProductValidation = (req, res, next) => {
 		saleEndDate: date,
 		description: longStr.required(),
 		images: args,
+		imgToDelete: longStr,
 		categories: args,
+	});
+
+	//validation
+	const value = schema.validate(req.body);
+
+	if (value.error) {
+		return res.json({
+			status: "error",
+			message: value.error.message,
+		});
+	}
+
+	next();
+};
+
+export const addCategoryValidation = (req, res, next) => {
+	const schema = Joi.object({
+		name: shortStr.required(),
+		parentCat: shortStr.allow(null).allow("").optional(),
+	});
+
+	//validation
+	const value = schema.validate(req.body);
+
+	if (value.error) {
+		return res.json({
+			status: "error",
+			message: value.error.message,
+		});
+	}
+
+	next();
+};
+
+export const updateCategoryValidation = (req, res, next) => {
+	console.log(req.body);
+
+	const schema = Joi.object({
+		_id: shortStr.required(),
+		name: shortStr.required(),
+		parentCat: shortStr.allow(null).allow(""),
 	});
 
 	//validation
