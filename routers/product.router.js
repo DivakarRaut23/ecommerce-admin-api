@@ -6,7 +6,7 @@ import multer from "multer";
 import {
 	newProductValidation,
 	updateProductValidation,
-} from "../middlewares/formValidation.middleware.js";
+} from "../middlewares/formValidationmiddleware.js";
 
 import {
 	insertProduct,

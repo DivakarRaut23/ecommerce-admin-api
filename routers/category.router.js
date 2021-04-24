@@ -12,7 +12,7 @@ import {
 import {
 	addCategoryValidation,
 	updateCategoryValidation,
-} from "../middlewares/formValidation.middleware.js";
+} from "../middlewares/formValidationmiddleware.js";
 
 router.all("*", (req, res, next) => {
 	next();
