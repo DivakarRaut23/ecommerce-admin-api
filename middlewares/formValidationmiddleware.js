@@ -58,23 +58,14 @@ export const newProductValidation = (req, res, next) => {
 };
 
 export const updateProductValidation = (req, res, next) => {
-<<<<<<< HEAD
 	req.body.saleEndDate =
 		req.body.saleEndDate === "null" ? null : req.body.saleEndDate;
-=======
-
-	req.body.saleEndDate = req.body.saleEndDate === "null" ? null : req.body.saleEndDate
->>>>>>> 4a2ee307f487d6c82906d9fbd40155e6d1234140
 
 	const categories = req.body.categories.length
 		? req.body.categories.split(",")
 		: [];
 
-<<<<<<< HEAD
 	req.body.categories = categories;
-=======
-	req.body.categories = categories
->>>>>>> 4a2ee307f487d6c82906d9fbd40155e6d1234140
 
 	const schema = Joi.object({
 		_id: shortStr.required(),
