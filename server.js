@@ -57,5 +57,5 @@ app.use((error, req, res, next) => {
 app.listen(PORT, error => {
 	if (error) console.log(error);
 
-	console.log(`Server is running at http://localhost:${PORT}`);
+	console.log(`Server is runn at http://localhost:${PORT}`);
 });

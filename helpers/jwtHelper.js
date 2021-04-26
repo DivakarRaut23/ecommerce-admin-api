@@ -1,66 +1,62 @@
-import jwt from 'jsonwebtoken'
-import {storeAccessJWT} from '../models/session/Session.model.js'
-import {storeRefreshJWT} from '../models/user/User.model.js'
+import jwt from "jsonwebtoken";
+import { storeAccessJwt } from "../models/session/Session.model.js";
+import { storeRefreshJWT } from "../models/user/User.model.js";
 
+export const createAccessJWT = (email, _id) => {
+	return new Promise((resolve, reject) => {
+		try {
+			const accessJWT = jwt.sign({ email }, process.env.JWT_ACCESS_SECRET, {
+				expiresIn: "15m",
+			});
 
-export const createAccessJWT =  (email, _id) => {
+			if (accessJWT) {
+				const newSession = {
+					accessJWT,
+					userId: _id,
+				};
+				storeAccessJwt(newSession);
+			}
 
-return new Promise((resolve, reject) =>{
+			resolve(accessJWT);
+		} catch (error) {
+			reject(error);
+		}
+	});
+};
 
-    try {
-        const accessJWT = jwt.sign({ email }, process.env.JWT_ACCESS_SECRET,{
-            expiresIn: '15m'
-        });
+export const createRefreshJWT = (email, _id) => {
+	return new Promise((resolve, reject) => {
+		try {
+			const refreshJWT = jwt.sign({ email }, process.env.JWT_REFRESH_SECRET, {
+				expiresIn: "30d",
+			});
 
-        if(accessJWT) {
-            const newSession = {
-                accessJWT,
-                userID: _id
+			storeRefreshJWT(_id, refreshJWT);
 
-            }
-            storeAccessJWT
-        }
+			resolve(refreshJWT);
+		} catch (error) {
+			reject(error);
+		}
+	});
+};
 
+export const verifyAccessJwt = accessJWT => {
+	try {
+		const decoded = jwt.verify(accessJWT, process.env.JWT_ACCESS_SECRET);
+		console.log(decoded);
+		return Promise.resolve(decoded);
+	} catch (error) {
+		console.log(error.message);
+		return Promise.resolve(false);
+	}
+};
 
-        resolve(accessJWT)
-    
-        
-    } catch (error) {
-        reject(error)
-        
-    }
+export const verifyRefreshJwt = refreshJWT => {
+	try {
+		const decoded = jwt.verify(refreshJWT, process.env.JWT_REFRESH_SECRET);
 
-})
-
-}
-
-
-export const createRefreshJWT = (email, _id) =>{
-    return new Promise((resolve, reject) =>{
-
-        try {
-        const refreshJWT =  jwt.sign({email}, process.env.JWT_REFERESH_SECRET, {
-            expiresIn: '30d'
-        })
-        resolve(refreshJWT)
-
-            
-        } catch (error) {
-            reject(error)
-            
-        }
-    })
-}
-
-export const verifyAccessJWT = accessJWT => {
-    try {
-
-        const decoded = jwt.verify(accessJWT, process.env.JWT_ACCESS_SECRET)
-        console.log(decoded)
-        return Promise.resolve(decoded)
-        
-    } catch (error) {
-        return Promise.reject(error)
-        
-    }
-}
+		return Promise.resolve(decoded);
+	} catch (error) {
+		return Promise.reject(error);
+	}
+};

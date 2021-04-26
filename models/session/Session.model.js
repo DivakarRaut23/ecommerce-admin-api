@@ -1,17 +1,21 @@
-import SessionSchema from './Session.schema.js'
+import SessionSchema from "./Session.schema.js";
 
-export const storeAccessJWT = (_id, accessJWT) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            
-        const result = await SessionSchema(newSession).save();
+export const storeAccessJwt = async newSession => {
+	try {
+		const result = await SessionSchema(newSession).save();
+		console.log(result);
+		return result;
+	} catch (error) {
+		console.log(error);
+	}
+};
 
-        return result
-
-        } catch (error) {
-
-            reject(error)
-            
-        }
-    })
-}
+export const getAccessJwtByToken = async accessJWT => {
+	try {
+		const result = await SessionSchema.findOne({ accessJWT });
+		return Promise.resolve(result);
+	} catch (error) {
+		console.log(error);
+		return Promise.resolve(false);
+	}
+};
