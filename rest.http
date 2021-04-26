@@ -6,8 +6,21 @@ POST  http://localhost:8000/api/v1/login
 Content-Type: application/json
 
 {
-  "email": "test@emai.comd",
-  "password": "12346"
+  "email": "rautbhai2g3@gmail.com",
+  "password": "unitedWay23"
+}
+
+
+### Create a User
+PUT http://localhost:8000/api/v1/login
+Content-Type: application/json
+
+{
+  "fName": "Divakar",
+  "lName": "Raut",
+  "email": "rautbhai2g3@gmail.com",
+  "password": "unitedWay23",
+  "role": "admin"
 }
 
 

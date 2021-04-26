@@ -9,6 +9,28 @@ const num = Joi.number();
 const args = Joi.array();
 const boolean = Joi.boolean();
 
+export const newUserValidation = (req, res, next) => {
+	const schema = Joi.object({ 
+		fName:  shortStr.required(), 
+		lName: shortStr.required(), 
+		email,
+		password,
+		role: shortStr
+	 });
+
+	//validation
+	const value = schema.validate(req.body);
+
+	if (value.error) {
+		return res.json({
+			status: "error",
+			message: value.error.message,
+		});
+	}
+
+	next();
+};
+
 export const loginValidation = (req, res, next) => {
 	const schema = Joi.object({ email, password });
 
@@ -24,6 +46,7 @@ export const loginValidation = (req, res, next) => {
 
 	next();
 };
+
 
 export const newProductValidation = (req, res, next) => {
 	const categories = req.body.categories.length
