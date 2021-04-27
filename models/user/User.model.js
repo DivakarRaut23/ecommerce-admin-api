@@ -37,6 +37,21 @@ export const getUserById = _id => {
 	});
 };
 
+export const getUserByEmailAndRefreshJWT = ({email, refreshJWT}) => {
+	return new Promise((resolve, reject) => {
+		try {
+			UsersSchema.findOne({
+				email,
+				"refreshJWT.token": refreshJWT
+			})
+				.then(data => resolve(data))
+				.catch(error => reject(error));
+		} catch (error) {
+			reject(error);
+		}
+	});
+};
+
 export const storeRefreshJWT = (_id, token) => {
 	return new Promise((resolve, reject) => {
 		try {

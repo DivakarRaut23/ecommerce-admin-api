@@ -15,7 +15,7 @@ Content-Type: application/json
 ###user routers
 ### get user by id
 GET  http://localhost:8000/api/v1/user
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJAYy5jb20iLCJpYXQiOjE2MTkzMzAzNTAsImV4cCI6MTYxOTMzMTI1MH0.yB7zipE6-kA26XGWl5NS9cY7nsir0PaH-LqbXfBHuSM
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhdXRiaGFpMmczQGdtYWlsLmNvbSIsImlhdCI6MTYxOTQ4MDQxNCwiZXhwIjoxNjE5NDgxMzE0fQ.lxe29xKWtM_PGKPQ_kLmpKipRPtEUjagCfsjJYx0rds
 
 
 ### Create a user
@@ -74,6 +74,12 @@ GET   http://localhost:8000/api/v1/product
 GET   http://localhost:8000/api/v1/product/607a850e263dc01ac00d540c
 
 
+
+###token endpoint
+#request fresh accessJWT
+
+GET   http://localhost:8000/api/v1/token
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhdXRiaGFpMmczQGdtYWlsLmNvbSIsImlhdCI6MTYxOTQ4NTY3MCwiZXhwIjoxNjIyMDc3NjcwfQ.wM2msAygJexoUYZOPHQvKzBZeBXmpGC8DpAM3mGVSYs
 
 
 

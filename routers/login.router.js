@@ -38,7 +38,7 @@ router.post("/", loginValidation, async (req, res) => {
 			message: "login success",
 			user,
 			accessJWT,
-			refreshJWT,
+			refreshJWT
 		});
 	} catch (error) {
 		console.log(error);
