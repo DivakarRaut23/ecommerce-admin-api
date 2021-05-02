@@ -24,17 +24,20 @@ app.use(express.json());
 import mongoClient from "./config/db.js";
 mongoClient();
 
+//Auth middleware
+import { userAuthorization } from "./middlewares/authorization.middleware.js";
+
 // LOAD ROUTERS
 import loginRouter from "./routers/login.router.js";
 import userRouter from "./routers/user.router.js";
 import categoryRouter from "./routers/category.router.js";
 import productRouter from "./routers/product.router.js";
-import tokenRouter from './routers/token.router.js'
+import tokenRouter from "./routers/token.router.js";
 //USE APIS
 app.use("/api/v1/login", loginRouter);
 app.use("/api/v1/user", userRouter);
-app.use("/api/v1/category", categoryRouter);
-app.use("/api/v1/product", productRouter);
+app.use("/api/v1/category", userAuthorization, categoryRouter);
+app.use("/api/v1/product", userAuthorization, productRouter);
 app.use("/api/v1/token", tokenRouter);
 
 app.get("/", (req, res) => {

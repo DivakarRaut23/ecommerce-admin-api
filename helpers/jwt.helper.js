@@ -43,7 +43,7 @@ export const createRefreshJWT = (email, _id) => {
 export const verifyAccessJwt = accessJWT => {
 	try {
 		const decoded = jwt.verify(accessJWT, process.env.JWT_ACCESS_SECRET);
-		console.log(decoded);
+
 		return Promise.resolve(decoded);
 	} catch (error) {
 		console.log(error.message);
@@ -51,6 +51,15 @@ export const verifyAccessJwt = accessJWT => {
 	}
 };
 
+// export const verifyRefreshJwt = refreshJWT => {
+// 	jwt.verify(
+// 		refreshJWT,
+// 		process.env.JWT_REFRESH_SECRET,
+// 		function (err, decoded) {
+// 			return err ? Promise.reject(false) : Promise.resolve(decoded);
+// 		}
+// 	);
+// };
 export const verifyRefreshJwt = refreshJWT => {
 	try {
 		const decoded = jwt.verify(refreshJWT, process.env.JWT_REFRESH_SECRET);

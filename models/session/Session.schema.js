@@ -7,7 +7,8 @@ const SchemaSession = mongoose.Schema(
 			require: true,
 			default: "",
 		},
-	    userId: {
+
+		userId: {
 			type: mongoose.Schema.ObjectId,
 			default: null,
 		},
